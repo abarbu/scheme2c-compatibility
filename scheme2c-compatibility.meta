@@ -1,0 +1,21 @@
+;;;  -*- Hen -*-
+
+((egg "scheme2c-compatibility.egg")
+ (category misc)
+ (author "Andrei Barbu")
+ (maintainer "Andrei Barbu")
+ (license "GPL")
+ (doc-from-wiki)
+ (synopsis "Scheme2c-Compatibility")
+ (depends
+  (setup-helper "1.5.2")
+  (miscmacros "2.91")
+  (check-errors "1.12.0")
+  (condition-utils "1.0.0")
+  (xlib "1.0")
+  (traversal "1.0"))
+ (test-depends test)
+ (files "scheme2c-compatibility.meta" 
+        "scheme2c-compatibility.release-info"
+        "scheme2c-compatibility.scm" 
+        "scheme2c-compatibility.setup"))
