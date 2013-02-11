@@ -6,4 +6,4 @@
 
 (setup-shared-extension-module 'scheme2c-compatibility (extension-version "1.0")
   #:inline? #t #:types? #t
-  #:compile-options '(-O3 -d2))
+  #:compile-options '(-d2))

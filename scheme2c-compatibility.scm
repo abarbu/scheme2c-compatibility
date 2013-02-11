@@ -1,6 +1,6 @@
 (module scheme2c-compatibility * 
 (import chicken scheme srfi-1 foreign posix lolevel extras traversal)
-(use posix lolevel foreigners xlib)
+(use posix lolevel foreigners xlib ports files)
 
 ;; http://paste.call-cc.org/paste?id=16706e0fe1ae3eecb85762a87ebbff295c8a7632#a2
 
@@ -42,6 +42,12 @@
 
 (define (tmp pathname) (string-append *tmp* "/" pathname))
 
+(define (with-temporary-file _ f)
+ (let* ((name (create-temporary-file))
+        (result (f name)))
+  (delete-file* name)
+  result))
+
 ;;; Pathnames
 
 ;;; needs work: missing notions: ., .., foo~, foo.~n~, .foo, #foo#, /foo/, and
@@ -78,6 +84,8 @@
 		 (length l)))
      pathname))
 
+(define (directory-list d) (directory d))
+
 (define (has-extension? pathname)
  (when (string=? pathname "-") (panic "Invalid pathname"))
  (let loop ((l (reverse (string->list pathname))))
@@ -109,6 +117,31 @@
 (define (replace-extension pathname extension)
  (when (string=? pathname "-") (panic "Invalid pathname"))
  (string-append (strip-extension pathname) "." extension))
+
+(define (read-object-from-file pathname)
+ (if (string=? pathname "-") (read) (call-with-input-file pathname read)))
+
+(define (write-object-to-file object pathname)
+ (cond ((string=? pathname "-") (pp object) (newline))
+       (else (call-with-output-file pathname
+	      (lambda (port) (pp object port) (newline port))))))
+
+(define (read-text-file pathname)
+ (if (string=? pathname "-")
+     (let loop ((lines '()) (line (read-line)))
+      (if (eof-object? line)
+	  (reverse lines)
+	  (loop (cons line lines) (read-line))))
+     (call-with-input-file pathname read-lines)))
+
+(define (write-text-file lines pathname)
+ (if (string=? pathname "-")
+     (for-each (lambda (line) (write-line line)) lines)
+     (call-with-output-file pathname
+      (lambda (port)
+       (for-each (lambda (line) (write-line line port)) lines)))))
+
+(define (read-from-string string) (with-input-from-string string read))
 
 ;;; End from QobiScheme
 
