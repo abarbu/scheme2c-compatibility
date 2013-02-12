@@ -368,30 +368,28 @@
    ((= size 1) c-byte-ref)
    ((= size c-sizeof-short) (if signed? c-shortint-ref c-shortunsigned-ref))
    ((= size c-sizeof-int)   (if signed? c-int-ref c-unsigned-ref))
-   ;; TODO longs
-   ;; ((= size c-sizeof-long)  (if signed? c-longint-ref c-longunsigned-ref))
-   (else (error "fuck-up"))))
+   ((= size c-sizeof-long)  (if signed? c-longint-ref c-longunsigned-ref))
+   (else (error "unknown size" size))))
 
 (define (c-sized-int-ptr-set! size signed?)
   (cond
    ((= size 1) c-byte-set!)
    ((= size c-sizeof-short) (if signed? c-shortint-set! c-shortunsigned-set!))
    ((= size c-sizeof-int)   (if signed? c-int-set! c-unsigned-set!))
-   ;; TODO longs
-   ;; ((= size c-sizeof-long)  (if signed? c-longint-set! c-longunsigned-set!))
-   (else (error "fuck-up"))))
+   ((= size c-sizeof-long)  (if signed? c-longint-set! c-longunsigned-set!))
+   (else (error "unknown size" size))))
 
 (define (c-sized-inexact-ptr-ref size signed?)
   (cond
    ((= size c-sizeof-float) c-float-ref)
    ((= size c-sizeof-double) c-double-ref)
-   (else (error "fuck-up"))))
+   (else (error "unknown size" size))))
 
 (define (c-sized-inexact-ptr-set! size signed?)
   (cond
    ((= size c-sizeof-float) c-float-set!)
    ((= size c-sizeof-double) c-double-set!)
-   (else (error "fuck-up"))))
+   (else (error "unknown size" size))))
 
 (define popen open-input-pipe)
 (define pclose close-input-pipe)
