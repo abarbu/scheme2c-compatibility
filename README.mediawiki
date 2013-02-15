@@ -1,8 +1,10 @@
+
 = scheme2c-compatibility =
 
 This implements miscellaneous functions and macros that make Chicken
 more compatible with Scheme2C. It's currently undocumented. Most of
-these are unlikely to be of interest to anyone.
+these are unlikely to be of interest to anyone. Some of these
+functions are originally from Jeff Siskind's QobiScheme.
 
 === License ===
 
@@ -11,6 +13,9 @@ these are unlikely to be of interest to anyone.
    Copyright 1996 and 1997 University of Vermont. All rights reserved.
    Copyright 1997-2001 NEC Research Institute, Inc. All rights reserved.
    Copyright 2002-2012 Purdue University. All rights reserved.
+
+contact Andrei Barbu, andrei@0xab.com
+
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or

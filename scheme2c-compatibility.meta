@@ -5,16 +5,9 @@
  (author "Andrei Barbu")
  (maintainer "Andrei Barbu")
  (license "GPL")
- (doc-from-wiki)
- (synopsis "Scheme2c-Compatibility")
- (depends
-  (setup-helper "1.5.2")
-  (miscmacros "2.91")
-  (check-errors "1.12.0")
-  (condition-utils "1.0.0")
-  (foreigners "1.4.1")
-  (xlib "1.0")
-  (traversal "1.0"))
+ (synopsis "Scheme->c compatibility package")
+ (depends setup-helper miscmacros check-errors condition-utils
+          foreigners xlib traversal)
  (test-depends test)
  (files "scheme2c-compatibility.meta" 
         "scheme2c-compatibility.release-info"
