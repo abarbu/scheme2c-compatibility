@@ -7,9 +7,191 @@ This page is maintained in the package's
 == scheme2c-compatibility
 
 This implements miscellaneous functions and macros that make Chicken
-more compatible with Scheme->C. It's currently undocumented. Most of
-these are unlikely to be of interest to anyone. Some of these
-functions are originally from Jeff Siskind's QobiScheme.
+more compatible with Scheme->C. Some of this comes from from Jeff
+Siskind's QobiScheme. Much of this functionality is redundant with
+that offered by other Chicken eggs but is offered with a
+Scheme->C-compatible API and naming scheme.
+
+==== List operations
+
+<procedure>(eleventh x)</procedure>
+<procedure>(twelfth x)</procedure>
+
+==== System
+
+<procedure>(usleep microseconds)</procedure>
+<procedure>(directory-list d)</procedure>
+
+==== File IO
+
+<procedure>(read-object-from-file pathname)</procedure>
+<procedure>(write-object-to-file object pathname)</procedure>
+
+Read/write a single scheme object to/from a file. This is not the same
+as chicken's ''read-file''.
+
+<procedure>(read-text-file pathname)</procedure>
+<procedure>(write-text-file lines pathname)</procedure>
+
+Read/write a text file.
+
+<procedure>(fclose handle)</procedure>
+<procedure>(fopen filename mode)</procedure>
+<procedure>(fmemopen buffer size mode)</procedure>
+
+<procedure>popen</procedure>
+<procedure>pclose</procedure>
+
+==== Paths
+
+<procedure>(strip-directory pathname)</procedure>
+<procedure>(has-extension? pathname)</procedure>
+<procedure>(extension pathname)</procedure>
+<procedure>(strip-extension pathname)</procedure>
+<procedure>(default-extension pathname extension)</procedure>
+<procedure>(replace-extension pathname extension)</procedure>
+<procedure>(has-directory? pathname)</procedure>
+<procedure>(get-directory pathname)</procedure>
+
+==== X11
+
+<procedure>(c-docolordither pic24 w h rdisp gdisp bdisp idisp maplen)</procedure>
+<procedure>(ylookupstring event . opt)</procedure>
+<procedure>(xallocnamedcolor3 dpy cmap colorname)</procedure>
+<procedure>(xquerypointer2 dpy w)</procedure>
+<procedure>getenv</procedure>
+
+==== Temporary files
+
+<parameter>*tmp*</parameter>
+<procedure>(tmp pathname)</procedure>
+<procedure>(with-temporary-file prefix f)</procedure>
+
+Call f with a unique filename that will be removed once f
+returns. Note that for now prefix and its extension is ignored! This
+is a bug.
+
+==== Bitwise operations
+
+<procedure>(bit-not n)</procedure>
+<procedure>(bit-and n)</procedure>
+<procedure>(bit-or n)</procedure>
+<procedure>(bit-lsh n offset)</procedure>
+<procedure>(bit-rsh n offset)</procedure>
+
+==== FFI compatibility
+
+
+===== Sizeof
+
+<procedure>c-sizeof-short</procedure>
+<procedure>c-sizeof-int</procedure>
+<procedure>c-sizeof-long</procedure>
+<procedure>c-sizeof-float</procedure>
+<procedure>c-sizeof-double</procedure>
+<procedure>c-sizeof-tscp</procedure>
+<procedure>c-sizeof-s2cuint</procedure>
+<procedure>c-sizeof-pointer</procedure>
+
+===== Memory accesss
+
+<procedure>(c-byte-ref ptr off)</procedure>
+<procedure>(c-byte-set! ptr off val)</procedure>
+<procedure>(c-double-ref ptr off)</procedure>
+<procedure>(c-double-set! ptr off val)</procedure>
+<procedure>(c-float-ref ptr off)</procedure>
+<procedure>(c-float-set! ptr off val)</procedure>
+<procedure>(c-int-ref ptr off)</procedure>
+<procedure>(c-int-set! ptr off val)</procedure>
+<procedure>(c-longint-ref ptr off)</procedure>
+<procedure>(c-longint-set! ptr off val)</procedure>
+<procedure>(c-longunsigned-ref ptr off)</procedure>
+<procedure>(c-longunsigned-set! ptr off val)</procedure>
+<procedure>(c-s2cuint-ref ptr off)</procedure>
+<procedure>(c-s2cuint-set! ptr off val)</procedure>
+<procedure>(c-shortint-ref ptr off)</procedure>
+<procedure>(c-shortint-set! ptr off val)</procedure>
+<procedure>(c-shortunsigned-ref ptr off)</procedure>
+<procedure>(c-shortunsigned-set! ptr off val)</procedure>
+<procedure>(c-unsigned-ref ptr off)</procedure>
+<procedure>(c-unsigned-set! ptr off val)</procedure>
+<procedure>(pointer-pointer-ref ptr-to-ptr)</procedure>
+<procedure>(pointer-pointer-set! ptr-to-ptr val)</procedure>
+<procedure>(c-string->string buf)</procedure>
+<procedure>(c-null-separated-strings->strings c-strings)</procedure>
+
+Access buffers containg various standard types. ''s2cuint'' is the
+same size as a pointer.
+
+===== Arrays
+
+<procedure>(c-array->list array get-element element-size nr-elements)</procedure>
+<procedure>(c-array->vector array get-element element-size nr-elements)</procedure>
+<procedure>(c-exact-array->list array element-size nr-elements signed?)</procedure>
+<procedure>(c-exact-array->vector array element-size nr-elements signed?)</procedure>
+<procedure>(c-inexact-array->list array element-size nr-elements signed?)</procedure>
+<procedure>(c-inexact-array->vector array element-size nr-elements signed?)</procedure>
+<procedure>(list->c-array array l set-element element-size)</procedure>
+<procedure>(list->c-exact-array array l element-size signed?)</procedure>
+<procedure>(list->c-inexact-array array l element-size signed?)</procedure>
+<procedure>(vector->c-array array v set-element element-size)</procedure>
+<procedure>(vector->c-exact-array array v element-size signed?)</procedure>
+<procedure>(vector->c-inexact-array array v element-size signed?)</procedure>
+
+Various functions to convert to and from C arrays.
+
+<procedure>(c-sized-int-ptr-ref size signed?)</procedure>
+<procedure>(c-sized-int-ptr-set! size signed?)</procedure>
+<procedure>(c-sized-inexact-ptr-ref size signed?)</procedure>
+<procedure>(c-sized-inexact-ptr-set! size signed?)</procedure>
+
+Return functions which access arrays with elements of given sizes.
+
+===== Scroped
+
+<procedure>(with-alloc x f)</procedure>
+<procedure>(with-buffer-stream f buffer size mode)</procedure>
+<procedure>(with-c-string str f)</procedure>
+<procedure>(with-file-stream f filename mode)</procedure>
+<procedure>(with-array elements element-size f)</procedure>
+<procedure>(with-c-pointers f v)</procedure>
+<procedure>(with-vector->c-array f set-element element-size v)</procedure>
+
+Perform many of the operations above automatically cleaning up once
+the procedure returns.
+
+===== misc
+
+<macro>c-value</macro>
+<macro>c-sizeof</macro>
+<macro>c-function</macro>
+
+<procedure>malloc</procedure>
+<procedure>memcpy</procedure>
+<procedure>bzero</procedure>
+
+<procedure>(unsigned-list->unsigneda l)</procedure>
+
+==== misc
+
+<procedure>(fuck-up)</procedure>
+<procedure>(panic format-string . &rest)</procedure>
+<procedure>(xor a b)</procedure>
+<parameter>*panic?*</parameter>
+<parameter>*program*</parameter>
+
+<procedure>(read-from-string string)</procedure>
+
+''(read)'' from a string.
+
+<procedure>flush-buffer</procedure>
+
+''flush-output''
+
+=== TODO
+
+''with-temporary-file'' is wrong! It ignores the prefix and more
+importantly its extension and will lead to breakage.
 
 === License
 

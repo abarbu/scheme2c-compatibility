@@ -11,28 +11,13 @@
    l)
   buffer))
 
-(define identity (lambda (a) a))
-
 ;; Really qobischeme
 (define (eleventh x) (caddr (cddddr (cddddr x))))
 (define (twelfth x) (cadddr (cddddr (cddddr x))))
 
 (define (xor a b) (if a (not b) b))
 
-(define usleep (foreign-lambda void "usleep" integer))
-
-(foreign-declare "#include \"dither.c\"")
-
-(define (c-docolordither pic24 w h rdisp gdisp bdisp idisp maplen)
- ((foreign-lambda c-pointer
-                  "DoColorDither"
-                  c-pointer int int c-pointer c-pointer c-pointer c-pointer int)
-  pic24 w h rdisp gdisp bdisp idisp maplen))
-
-(define-syntax while
- (syntax-rules ()
-  ((_ condition body ...)
-   (let loop () (if condition (begin body ... (loop)) #f)))))
+(define (usleep microseconds) ((foreign-lambda void "usleep" integer) microseconds))
 
 (define (fuck-up) (error "fuck-up"))
 
@@ -187,18 +172,19 @@
 (define c-sizeof-s2cuint (foreign-type-size "void*"))
 (define c-sizeof-pointer (foreign-type-size "void*"))
 
-(define pointer-pointer-ref
- (foreign-lambda* c-pointer ((c-pointer ptr)) "C_return(*(void**)ptr);"))
+(define (pointer-pointer-ref ptr-to-ptr)
+ ((foreign-lambda* c-pointer ((c-pointer ptr)) "C_return(*(void**)ptr);") ptr-to-ptr))
 
-(define pointer-pointer-set!
- (foreign-lambda* 
-  void
-  ((c-pointer ptr) (c-pointer value))
-  "*(void**)ptr = value;"
-  "C_return(0);"))
+(define (pointer-pointer-set! ptr-to-ptr val)
+ ((foreign-lambda* 
+   void
+   ((c-pointer ptr) (c-pointer value))
+   "*(void**)ptr = value;"
+   "C_return(0);")
+  ptr-to-ptr val))
 
-(define c-string->string
- (foreign-lambda* c-string ((c-pointer string)) "C_return(string);"))
+(define (c-string->string ptr)
+ ((foreign-lambda* c-string ((c-pointer string)) "C_return(string);") ptr))
 
 ;; Scheme->C SRFI-4 compatibility
 (define (c-byte-ref ptr off) (pointer-u8-ref (pointer+ ptr off)))
@@ -396,18 +382,15 @@
 
 ;;; X11
 
-(foreign-declare "#include <X11/Xlib.h>")
+(foreign-declare "#include \"dither.c\"")
 
-;; (define (YLOOKUPSTRING event . opt)
-;;     (let* ((event (chk-xeventp event))
-;; 	   (keysym (if (and opt (car opt)) (make-string sizeof-long) 0))
-;; 	   (status (if (= (length opt) 2) (chk-xcomposestatusp (cadr opt)) 0))
-;; 	   (result (xlookupstring* event xlookupstring-buffer 50 keysym
-;; 		       status)))
-;; 	  (if opt
-;; 	      (list (substring xlookupstring-buffer 0 result)
-;; 		    (if (car opt) (c-longunsigned-ref keysym 0) #f))
-;; 	      (substring xlookupstring-buffer 0 result))))
+(define (c-docolordither pic24 w h rdisp gdisp bdisp idisp maplen)
+ ((foreign-lambda c-pointer
+                  "DoColorDither"
+                  c-pointer int int c-pointer c-pointer c-pointer c-pointer int)
+  pic24 w h rdisp gdisp bdisp idisp maplen))
+
+(foreign-declare "#include <X11/Xlib.h>")
 
 (define (ylookupstring event . opt)
  (let* ((buffer-size 100)
@@ -420,21 +403,10 @@
    (let ((size
           ((foreign-lambda int "XLookupString" c-pointer blob int c-pointer c-pointer)
            event buffer buffer-size (location keysym) status)))
-    ;; (foreign-lambda 
-    ;;  int
-    ;;  "XLookupString"
-    ;;  C-POINTER C-STRING INTEGER C-POINTER C-POINTER)
-    ;; (xlookupstring event buffer buffer-size keysym status)
     (if (null? opt)
         (substring (blob->string buffer) 0 size)
         (list (substring (blob->string buffer) 0 size)
               (if (car opt) keysym #f)))))))
-
-;; (extern Status "XAllocNamedColor"
-;;         (DisplayP dpy)
-;;         (Colormap cmap)
-;;         (string colorname)
-;;         (out XColor hard_def) (out XColor exact_def))
 
 (define (xallocnamedcolor3 dpy cmap colorname)
  ;; TODO Change this to a let-location
@@ -443,14 +415,6 @@
         (return-value (xallocnamedcolor dpy cmap colorname
                                         color1 color2)))
   (list return-value color1 color2)))
-
-;; (extern Bool "XQueryPointer"
-;; 	(DisplayP dpy)
-;; 	(Window w)
-;; 	(out Window root) (out Window child)
-;; 	(out int root_x) (out int root_y)
-;; 	(out int win_x) (out int win_y)
-;; 	(out unsignedint mask))
 
 (define (xquerypointer2 dpy w)
  ;; TODO Change this to a let-location
@@ -473,4 +437,5 @@
                            (location win-y)
                            (location mask))))
     (list r root child root-x root-y win-x win-y mask)))))
+
 )

@@ -1,10 +1,192 @@
 
-= scheme2c-compatibility =
+== scheme2c-compatibility ==
 
 This implements miscellaneous functions and macros that make Chicken
-more compatible with Scheme2C. It's currently undocumented. Most of
-these are unlikely to be of interest to anyone. Some of these
-functions are originally from Jeff Siskind's QobiScheme.
+more compatible with Scheme->C. Some of this comes from from Jeff
+Siskind's QobiScheme. Much of this functionality is redundant with
+that offered by other Chicken eggs but is offered with a
+Scheme->C-compatible API and naming scheme.
+
+==== List operations ====
+
+:(eleventh x)
+:(twelfth x)
+
+==== System ====
+
+:(usleep microseconds)
+:(directory-list d)
+
+==== File IO ====
+
+:(read-object-from-file pathname)
+:(write-object-to-file object pathname)
+
+Read/write a single scheme object to/from a file. This is not the same
+as chicken's ''read-file''.
+
+:(read-text-file pathname)
+:(write-text-file lines pathname)
+
+Read/write a text file.
+
+:(fclose handle)
+:(fopen filename mode)
+:(fmemopen buffer size mode)
+
+:popen
+:pclose
+
+==== Paths ====
+
+:(strip-directory pathname)
+:(has-extension? pathname)
+:(extension pathname)
+:(strip-extension pathname)
+:(default-extension pathname extension)
+:(replace-extension pathname extension)
+:(has-directory? pathname)
+:(get-directory pathname)
+
+==== X11 ====
+
+:(c-docolordither pic24 w h rdisp gdisp bdisp idisp maplen)
+:(ylookupstring event . opt)
+:(xallocnamedcolor3 dpy cmap colorname)
+:(xquerypointer2 dpy w)
+:getenv
+
+==== Temporary files ====
+
+:*tmp*
+:(tmp pathname)
+:(with-temporary-file prefix f)
+
+Call f with a unique filename that will be removed once f
+returns. Note that for now prefix and its extension is ignored! This
+is a bug.
+
+==== Bitwise operations ====
+
+:(bit-not n)
+:(bit-and n)
+:(bit-or n)
+:(bit-lsh n offset)
+:(bit-rsh n offset)
+
+==== FFI compatibility ====
+
+
+===== Sizeof =====
+
+:c-sizeof-short
+:c-sizeof-int
+:c-sizeof-long
+:c-sizeof-float
+:c-sizeof-double
+:c-sizeof-tscp
+:c-sizeof-s2cuint
+:c-sizeof-pointer
+
+===== Memory accesss =====
+
+:(c-byte-ref ptr off)
+:(c-byte-set! ptr off val)
+:(c-double-ref ptr off)
+:(c-double-set! ptr off val)
+:(c-float-ref ptr off)
+:(c-float-set! ptr off val)
+:(c-int-ref ptr off)
+:(c-int-set! ptr off val)
+:(c-longint-ref ptr off)
+:(c-longint-set! ptr off val)
+:(c-longunsigned-ref ptr off)
+:(c-longunsigned-set! ptr off val)
+:(c-s2cuint-ref ptr off)
+:(c-s2cuint-set! ptr off val)
+:(c-shortint-ref ptr off)
+:(c-shortint-set! ptr off val)
+:(c-shortunsigned-ref ptr off)
+:(c-shortunsigned-set! ptr off val)
+:(c-unsigned-ref ptr off)
+:(c-unsigned-set! ptr off val)
+:(pointer-pointer-ref ptr-to-ptr)
+:(pointer-pointer-set! ptr-to-ptr val)
+:(c-string->string buf)
+:(c-null-separated-strings->strings c-strings)
+
+Access buffers containg various standard types. ''s2cuint'' is the
+same size as a pointer.
+
+===== Arrays =====
+
+:(c-array->list array get-element element-size nr-elements)
+:(c-array->vector array get-element element-size nr-elements)
+:(c-exact-array->list array element-size nr-elements signed?)
+:(c-exact-array->vector array element-size nr-elements signed?)
+:(c-inexact-array->list array element-size nr-elements signed?)
+:(c-inexact-array->vector array element-size nr-elements signed?)
+:(list->c-array array l set-element element-size)
+:(list->c-exact-array array l element-size signed?)
+:(list->c-inexact-array array l element-size signed?)
+:(vector->c-array array v set-element element-size)
+:(vector->c-exact-array array v element-size signed?)
+:(vector->c-inexact-array array v element-size signed?)
+
+Various functions to convert to and from C arrays.
+
+:(c-sized-int-ptr-ref size signed?)
+:(c-sized-int-ptr-set! size signed?)
+:(c-sized-inexact-ptr-ref size signed?)
+:(c-sized-inexact-ptr-set! size signed?)
+
+Return functions which access arrays with elements of given sizes.
+
+===== Scroped =====
+
+:(with-alloc x f)
+:(with-buffer-stream f buffer size mode)
+:(with-c-string str f)
+:(with-file-stream f filename mode)
+:(with-array elements element-size f)
+:(with-c-pointers f v)
+:(with-vector->c-array f set-element element-size v)
+
+Perform many of the operations above automatically cleaning up once
+the procedure returns.
+
+===== misc =====
+
+:c-value
+:c-sizeof
+:c-function
+
+:malloc
+:memcpy
+:bzero
+
+:(unsigned-list->unsigneda l)
+
+==== misc ====
+
+:(fuck-up)
+:(panic format-string . &rest)
+:(xor a b)
+:*panic?*
+:*program*
+
+:(read-from-string string)
+
+''(read)'' from a string.
+
+:flush-buffer
+
+''flush-output''
+
+=== TODO ===
+
+''with-temporary-file'' is wrong! It ignores the prefix and more
+importantly its extension and will lead to breakage.
 
 === License ===
 
@@ -14,7 +196,7 @@ functions are originally from Jeff Siskind's QobiScheme.
    Copyright 1997-2001 NEC Research Institute, Inc. All rights reserved.
    Copyright 2002-2012 Purdue University. All rights reserved.
 
-contact Andrei Barbu, andrei@0xab.com
+Contact Andrei Barbu, andrei@0xab.com.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
