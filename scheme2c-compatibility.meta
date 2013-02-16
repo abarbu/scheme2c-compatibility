@@ -4,7 +4,7 @@
  (category misc)
  (author "Andrei Barbu")
  (maintainer "Andrei Barbu")
- (license "GPL")
+ (license "LGPL")
  (synopsis "Scheme->c compatibility package")
  (depends setup-helper miscmacros check-errors condition-utils
           foreigners xlib traversal)
