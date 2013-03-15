@@ -1,6 +1,6 @@
 (module scheme2c-compatibility * 
-(import chicken scheme srfi-1 foreign posix lolevel extras traversal)
-(use posix lolevel foreigners xlib ports files)
+(import chicken scheme srfi-1 foreign posix lolevel extras traversal data-structures)
+(use posix lolevel foreigners xlib ports files srfi-13 srfi-14)
 
 ;; http://paste.call-cc.org/paste?id=16706e0fe1ae3eecb85762a87ebbff295c8a7632#a2
 
@@ -32,6 +32,17 @@
         (result (f name)))
   (delete-file* name)
   result))
+
+;;; Strings
+
+(define (lines string) (string-split string "\n" #t))
+(define (unlines l) (string-join l "\n"))
+(define (words string) (string-split string " " #t))
+(define (unwords l) (string-join l " "))
+(define (number-of-fields string) (length (fields string)))
+(define (field-ref string n) (list-ref (fields string) n))
+(define (fields string)
+ (string-tokenize string (char-set-complement char-set:whitespace)))
 
 ;;; Pathnames
 
