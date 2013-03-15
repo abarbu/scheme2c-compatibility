@@ -7,10 +7,32 @@ Siskind's QobiScheme. Much of this functionality is redundant with
 that offered by other Chicken eggs but is offered with a
 Scheme->C-compatible API and naming scheme.
 
-==== List operations ====
+==== Lists ====
 
 :(eleventh x)
 :(twelfth x)
+
+==== Strings ====
+
+:(lines string)
+
+Combine a list of lines into a string separated by newlines.
+
+:(unlines l)
+
+Split a string into a list of lines.
+
+:(words string)
+
+Split a string into words.
+
+:(unwords l)
+
+Combine a list of words into a string separated by spaces.
+
+:(number-of-fields string)
+:(field-ref string n)
+:(fields string)
 
 ==== System ====
 
