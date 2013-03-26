@@ -84,9 +84,8 @@ Read/write a text file.
 :(tmp pathname)
 :(with-temporary-file prefix f)
 
-Call f with a unique filename that will be removed once f
-returns. Note that for now prefix and its extension is ignored! This
-is a bug.
+Call f with a unique filename that will be removed once f returns. The
+extension of prefix is honored, but not its base filename.
 
 ==== Bitwise operations ====
 

@@ -27,8 +27,10 @@
 
 (define (tmp pathname) (string-append *tmp* "/" pathname))
 
-(define (with-temporary-file _ f)
- (let* ((name (create-temporary-file))
+(define (with-temporary-file filename f)
+ (let* ((name (create-temporary-file (if (has-extension? filename)
+                                         (extension filename)
+                                         "")))
         (result (f name)))
   (delete-file* name)
   result))
@@ -49,7 +51,7 @@
 ;;; needs work: missing notions: ., .., foo~, foo.~n~, .foo, #foo#, /foo/, and
 ;;;             foo/
 
-(define *panic?* #t)
+(define *panic?* #f)
 
 (define *program* #f)
 
