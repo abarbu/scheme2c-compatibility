@@ -4,6 +4,6 @@
 
 (verify-extension-name "scheme2c-compatibility")
 
-(setup-shared-extension-module 'scheme2c-compatibility (extension-version "1.4")
+(setup-shared-extension-module 'scheme2c-compatibility (extension-version "1.5")
   #:inline? #t #:types? #t
   #:compile-options '(-d2 -lX11))

@@ -393,6 +393,10 @@
 (define popen open-input-pipe)
 (define pclose close-input-pipe)
 
+(define (exact-round x) (inexact->exact (round x)))
+(define (exact-ceiling x) (inexact->exact (ceiling x)))
+(define (exact-floor x) (inexact->exact (floor x)))
+
 ;;; X11
 
 (foreign-declare "#include \"dither.c\"")

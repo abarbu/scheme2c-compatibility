@@ -183,6 +183,12 @@ the procedure returns.
 
 ===== misc
 
+<procedure>(exact-round x)</procedure>
+<procedure>(exact-ceiling x)</procedure>
+<procedure>(exact-floor x)</procedure>
+
+Round/floor/ceiling and ''inexact->exact''.
+
 <macro>c-value</macro>
 <macro>c-sizeof</macro>
 <macro>c-function</macro>
