@@ -2,7 +2,6 @@
 #include <math.h>
 #include <ctype.h>
 #include <stddef.h>
-#include <malloc.h>
 
 #define RANGE(a,b,c) { if (a < b) a = b;  if (a > c) a = c; }
 
