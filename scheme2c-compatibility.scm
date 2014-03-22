@@ -408,6 +408,7 @@
   pic24 w h rdisp gdisp bdisp idisp maplen))
 
 (foreign-declare "#include <X11/Xlib.h>")
+(foreign-declare "#include <X11/Xutil.h>")
 
 (define (ylookupstring event . opt)
  (let* ((buffer-size 100)
