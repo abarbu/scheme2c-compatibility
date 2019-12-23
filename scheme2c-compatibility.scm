@@ -1,6 +1,43 @@
-(module scheme2c-compatibility * 
-(import chicken scheme srfi-1 foreign posix lolevel extras traversal data-structures)
-(use posix lolevel foreigners xlib ports files srfi-13 srfi-14)
+(module scheme2c-compatibility *
+
+(import scheme)
+
+(cond-expand
+  (chicken-4
+    (import
+      chicken
+      srfi-1
+      foreign
+      posix
+      lolevel
+      extras
+      traversal
+      data-structures)
+    (use posix lolevel foreigners xlib ports files srfi-13 srfi-14))
+  (chicken-5
+    (import
+      scheme
+      (chicken base)
+      (chicken bitwise)
+      (chicken blob)
+      (chicken file)
+      (chicken fixnum)
+      (chicken foreign)
+      (chicken format)
+      (chicken io)
+      (chicken memory)
+      (chicken port)
+      (chicken pretty-print)
+      (chicken process)
+      (chicken process-context)
+      (chicken string)
+      srfi-1
+      srfi-13
+      srfi-14
+      foreigners
+      xlib)
+    (include "shims.scm")))
+
 
 ;; http://paste.call-cc.org/paste?id=16706e0fe1ae3eecb85762a87ebbff295c8a7632#a2
 
