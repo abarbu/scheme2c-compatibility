@@ -35,8 +35,8 @@
       srfi-13
       srfi-14
       foreigners
-      xlib)
-    (include "shims.scm")))
+      traversal
+      xlib)))
 
 
 ;; http://paste.call-cc.org/paste?id=16706e0fe1ae3eecb85762a87ebbff295c8a7632#a2

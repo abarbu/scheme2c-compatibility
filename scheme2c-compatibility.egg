@@ -5,11 +5,11 @@
  (maintainer "Andrei Barbu")
  (license "LGPL")
  (synopsis "Scheme->c compatibility package")
- (dependencies srfi-1 srfi-13 srfi-14 foreigners xlib)
+ (dependencies srfi-1 srfi-13 srfi-14 traversal foreigners xlib)
  (test-dependencies test)
  (components (extension scheme2c-compatibility
                         (types-file)
                         (inline-file)
-                        (source-dependencies "shims.scm" "dither.c")
+                        (source-dependencies "dither.c")
                         (custom-build "build")
                         (csc-options -d2))))
