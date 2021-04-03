@@ -6,9 +6,7 @@
  (maintainer "Andrei Barbu")
  (license "LGPL")
  (synopsis "Scheme->c compatibility package")
- (depends setup-helper miscmacros check-errors condition-utils
-          foreigners xlib traversal)
- (test-depends test)
+ (depends setup-helper foreigners xlib traversal)
  (files "scheme2c-compatibility.meta" 
         "scheme2c-compatibility.release-info"
         "scheme2c-compatibility.scm" 
